@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="user-scalable=0, width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0">
+  <title>The Test</title>
+  <link rel="icon" type="image/png" href="favicon.ico">
+  <link rel="stylesheet" type="text/css" href="css/style.css">
+  <script src="js/util/waitfortag.js"></script>
+  <script src="js/util/params.js"></script>
+<!--  <script src="js/lptag/1.10.0.js"></script>-->
+  <script src="js/util/includescripts.js"></script>
+</head>
+
+<body>
+<!--    Query Param Config  -->
+  <div>
+    <h3>Test Page Configuration via Query Parameters</h3>
+    <h4>Tag</h4>
+    <p>?account={<span id="accountSpan">61840567</span>} - change siteid </p>
+    <p>&cdn - use lptag cdn</p>
+    <p>&alpha - use alpha tag (currently can't be used with lpcdn tag)</p>
+    <p>&tag={1.10} - specify tag version. default is 1.10. options are 1.0, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 1.10</p>
+    <p>&autostart=false - don't autostart the tag</p>
+    <h4>Page</h4>
+    <p>&divids={divid1},{divid2} - add div ids to the page for embedded engagements</p>
+    <p>&scripts={script1},{script2} - load scripts (hooks, events, convinfo, etc...)</p>
+    <p>&styles={style1},{style2} - load stylesheets (embed, slider, etc...)</p>
+    <p>&amp;sections={sec1},{sec2} - specify page section(s)</p>
+    <h4>Auth</h4>
+    <p>&randomsub - pass identity function with random sub</p>
+    <p>&sub={somesub} - pass identity function with specified sub</p>
+    <p>&externalauth - use the hardcoded JWT for authenticated messaging (For use when not on LP VPN but using my key. Only works with embedded window & implicit flow.)</p>
+    <p>&auth-ngrok={093e70fd1c6f} - use an ngrok domain for the auth server (alternate server also has to be configured in LE auth settings)</p>
+  </div>
+<!--    lpTag.newPage() -->
+<div>
+  <h3>lpTag.newPage</h3>
+  <label for="newPageSections">Sections:</label>
+  <input id="newPageSections">
+  <button onclick="newPage()">lpTag.newPage()</button>
+  <script src="js/util/newpage.js"></script>
+</div>
+<!--    location.reload() -->
+<div>
+  <h3>Refresh Page</h3>
+<!--  <label for="reloadPageSections">Sections:</label>-->
+<!--  <input id="reloadPageSections">-->
+  <button onclick="location.reload()">location.reload()</button>
+</div>
+<!--    Authentication  -->
+  <div>
+    <h3>Authentication</h3>
+    <h4>JWT Claims:</h4>
+    <label for="jwtSub">Sub</label>
+    <input id="jwtSub" disabled>
+    <label for="jwtGivenName">Given Name</label>
+    <input id="jwtGivenName" placeholder="blank">
+    <label for="jwtFamilyName">Family Name</label>
+    <input id="jwtFamilyName" placeholder="blank">
+    <label for="jwtEmail">Email</label>
+    <input id="jwtEmail" placeholder="blank">
+<!--    <label for="jwtGender">Gender</label>-->
+<!--    <input id="jwtGender" placeholder="blank">-->
+    <label for="jwtPreferredUserName">Preferred Name</label>
+    <input id="jwtPreferredUserName" placeholder="blank">
+    <label for="jwtPhoneNumber">Phone Number</label>
+    <input id="jwtPhoneNumber" placeholder="blank">
+<!--    <h4>Auth SDEs:</h4>-->
+<!--    <label for="customerInfo.cstatus"></label>-->
+<!--    <input id="customerInfo.cstatus" placeholder="Visitor">-->
+    <h4>My Key</h4>
+    <label for="authPubKey">Pubkey:</label><br />
+    <textarea id="authPubKey" disabled cols=50 rows=8>MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA73U7Jmf//QZi/JiTSNWrXSa98et+JRFm1nkF5dYArJ33ehYRdnu83wM6/zSdgUfTFNjNY6k+TvHTr2iaV69gLMDlI+Nyp7oxiBC7uRjapAYad2Hkmp9y54gvM9I0yfzdLHf6vVSU+M37qUD1UdoPe16SBZLynBvQ3mndijOqTgMhxHSEcmcO2Bv3UDJauSmKDhEalfDvF6t/libv8yobC6QjLDVw3JrHazh/bvU6gBBuOSJqCN95RsAPo4nNZQvEefG+a5JHHh00NfqOZLmauHezgDLyC/g3lOCX9W1ui3Xn6hyv84hafKkloZn3efqmUo+GtCWouRJ/6ZN5roF9DQIDAQAB</textarea>
+    <br /><br />
+    <label for="authHardCodedJWT">
+      <input type="checkbox" id="authHardCode">
+      <label for="authHardCode">Use hardcoded JWT (Check this if not on LP VPN. Only works with embedded window & implicit flow.)</label>
+    </label><br />
+    <textarea id="authHardCodedJWT" disabled cols=100 rows=11>eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBwb3J0X2FwaSIsImlhdCI6MTYwMjg4MzM3NSwiZXhwIjoxNjM0NDIzMzc1LCJzdWIiOiIxMzg3NjZBQyIsImxwX3NkZXMiOlt7InR5cGUiOiJjdG1yaW5mbyIsImluZm8iOnsiY3N0YXR1cyI6ImNhbmNlbGxlZCIsImN0eXBlIjoidmlwIiwiY3VzdG9tZXJJZCI6IjEzODc2NkFDIiwiYmFsYW5jZSI6LTQwMC45OSwic29jaWFsSWQiOiIxMTI1NjMyNDc4MCIsImltZWkiOiIzNTQzNTQ2NTQzNTQ1Njg4IiwidXNlck5hbWUiOiJ1c2VyMDAwIiwiY29tcGFueVNpemUiOjUwMCwiYWNjb3VudE5hbWUiOiJiYW5rIGNvcnAiLCJyb2xlIjoiYnJva2VyIiwibGFzdFBheW1lbnREYXRlIjp7ImRheSI6MTUsIm1vbnRoIjoxMCwieWVhciI6MjAxNH0sInJlZ2lzdHJhdGlvbkRhdGUiOnsiZGF5IjoyMywibW9udGgiOjUsInllYXIiOjIwMTN9fX1dfQ.Rov4t88KpDEaAZbr9kl3N4QI2QFm_uShwpKEAPFwx-13i7HgsOV9fAlwXYqUhH7IERvMsGBepnGJ3n1CiF4Y4kGihwY4lWDDI0PeOsLFGVnDbeJgwPGC-TV2IPtAoCiPt_nVNU_1J1RuLFcRgHPc14cg2qLATIoIUnQGWOBbj3J26PwVKbjjfsZOJvBHe8fmipzGLeF0TExvaBolYXEZotKOzMq3sllURtunIQ3ybnIshwL5PyS-3bkwP-7dpIFboPB3vVB6g3SjR1Cvx1WSeQtilM8mjt2ro8NEV895lNCX7hDAw-WW-ueae21nvFuAxjpBiQdibMDbeKj5ZlRMJQ</textarea>
+
+    <h4>Your Key</h4>
+    <p>Putting a token here overrides the "use hardcoded JWT" checkbox above</p>
+    <label for="authYourJWT">Your JWT:</label><br />
+    <textarea id="authYourJWT" cols=100 rows=11 placeholder="Paste your JWT token here.  It should be signed using the private key which corresponds to the public key in your account's Data Sources > Integrations > Authentication Server config."></textarea>
+
+    <h4>Push Identity Function Manually</h4>
+    <input type="checkbox" id="authNewPageAfterIdentity" checked>
+    <label for="authNewPageAfterIdentity">Automatically call lpTag.newPage() page after pushing identity function</label>
+    <br /><br />
+    <label for="authSub">Sub:</label>
+    <input id="authSub" placeholder="random">
+    <button id="pushIdentity" onclick="pushIdentity(document.getElementById('authSub').value, true)">set identity</button>
+
+    <h4>Step Up</h4>
+    <label for="stepUpSub">Sub:</label>
+    <input id="stepUpSub" placeholder="random">
+    <button id="stepUp" onclick="stepUp(document.getElementById('stepUpSub').value)">refresh with identity</button>
+
+    <script src="js/util/auth.js"></script>
+  </div>
+<!--    SDEs  -->
+  <div>
+    <h3>SDEs</h3>
+    <script src="js/util/sdes.js"></script>
+
+    <h5>Service Activity</h5>
+    <label for="serviceActivityTopic">topic:</label>
+    <input id="serviceActivityTopic">
+    <label for="serviceActivityStatus">status:</label>
+    <select id="serviceActivityStatus">
+      <option>Undefined</option>
+      <option value="0">0-Complete</option>
+      <option value="1">1-In Progress</option>
+      <option value="2">2- Approved</option>
+      <option value="3">3- cancelled</option>
+      <option value="4">4-Not Approved</option>
+      <option value="5">5-Reviewed</option>
+      <option value="6">6- Missing Details</option>
+      <option value="7">7- Closed</option>
+      <option value="8">8-Removed</option>
+      <option value="9">9-Assigned</option>
+      <option value="10">10-Waiting</option>
+    </select>
+    <label for="serviceActivityCategory">category:</label>
+    <input id="serviceActivityCategory">
+    <label for="serviceActivityServiceId">serviceId:</label>
+    <input id="serviceActivityServiceId">
+    <button onclick="pushSDEs(undefined, 'service')">push()</button>
+    <button onclick="sendSDEs(undefined, 'service')">send()</button>
+
+    <h5>Error</h5>
+    <label for="errorContextId">contextId:</label>
+    <input id="errorContextId">
+    <label for="errorLevel">level:</label>
+    <input id="errorLevel" type="number">
+    <label for="errorCode">code:</label>
+    <input id="errorCode">
+    <label for="errorMessage">message:</label>
+    <input id="errorMessage">
+    <label for="errorResolved">resolved:</label>
+    <input type="checkbox" id="errorResolved">
+    <button onclick="pushSDEs(undefined, 'error')">push()</button>
+    <button onclick="sendSDEs(undefined, 'error')">send()</button>
+
+    <h5>Marketing Source</h5>
+    <label for="mrktInfoChannel">channel:</label>
+    <select id="mrktInfoChannel">
+      <option>Undefined</option>
+      <option value="0">0-Direct</option>
+      <option value="1">1-Search</option>
+      <option value="2">2-Social</option>
+      <option value="3">3-Email</option>
+      <option value="4">4-Referral</option>
+    </select>
+    <label for="mrktInfoAffiliate">affiliate:</label>
+    <input id="mrktInfoAffiliate">
+    <label for="mrktInfoCampaignId">campaignId:</label>
+    <input id="mrktInfoCampaignId">
+    <button onclick="pushSDEs(undefined, 'mrktInfo')">push()</button>
+    <button onclick="sendSDEs(undefined, 'mrktInfo')">send()</button>
+
+    <h5>Searched Content</h5>
+    <label for="searchInfoKeywords">channel:</label>
+    <input id="searchInfoKeywords">
+    <button onclick="pushSDEs(undefined, 'searchInfo')">push()</button>
+    <button onclick="sendSDEs(undefined, 'searchInfo')">send()</button>
+  </div>
+<br />
+</body>
+</html>
