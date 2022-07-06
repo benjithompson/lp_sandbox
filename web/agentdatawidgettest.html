@@ -27,7 +27,7 @@
                             encryptedData = encryptedData.substring(encryptedData.lastIndexOf(":-:-:") + 5);
                             console.log("LPCustomer widget" + encryptedData);
                             encryptedData = encryptedData.replace(/\r?\n|\r/g, "");
-                            decryptCustData(encryptedData);
+                            formatData(encryptedData);
                             datarReceivedFlag = true;
                         }
                     }
@@ -67,16 +67,12 @@
 
                 if (data != null) {
 
-                    for (let i in data) {
-
-                        HTMLStr = "<tr><td class='keys'>" + i
-                            + "</td><td class='values'>"
-                            + data[i] + "</td></tr>";
+                        HTMLStr = "</tr><td class='values'>" + data + "</td></tr>";
 
                         document.querySelector("table")
                             .insertAdjacentHTML('beforeend',
                                 HTMLStr);
-                    }
+                    
                 }
                 else {
                     HTMLString = "<div><p style = 'text-align:center;color: #fff; '> Unable to display Agent details. </p></div>";
