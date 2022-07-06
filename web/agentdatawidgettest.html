@@ -15,11 +15,6 @@
                 chatInfo = data;
             }, onError);
 
-
-            var pathToData = "SDE.searchContent";
-            console.log("bind to: " + pathToData);
-            lpTag.agentSDK.bind(pathToData, onSuccess, onError);
-
             var onSuccess = function (data) {
                 console.log("Bind Success: " + data)
                 var datarReceivedFlag = false;
@@ -48,6 +43,7 @@
             };
 
             function formatData(data) {
+
                 const encryptServletUrl = "https://collaborateext.verizon.com/comm/aims/EncryptDecrypt.serv";
 
 
@@ -67,7 +63,16 @@
                             HTMLString);
                 }
             }
+
+            var pathToData = "SDE.searchContent";
+            console.log("bind to: " + pathToData);
+            lpTag.agentSDK.bind(pathToData, onSuccess, onError);
+
+
         })();
+
+
+
     </script>
 </head>
 
