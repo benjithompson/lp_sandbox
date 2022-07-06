@@ -1,186 +1,149 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
+
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<script type="text/javascript" src="js/external/jquery-1.7.2.min.js"></script>
-<script type="text/javascript" src="js/external/clientsdk.js"></script>
-<title>Insert title here</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+    <script type="text/javascript" src="js/external/jquery-1.7.2.min.js"></script>
+    <script type="text/javascript" src="js/external/clientsdk.js"></script>
+    <title>Insert title here</title>
 
-<script>
-	(function() {
-		var chatInfo ={};
-		lpTag.agentSDK.init({});
-		lpTag.agentSDK.bind("chatInfo", function(data) {
-			chatInfo = data;
-		}, onError);
-				
+    <script>
+        (function () {
+            var chatInfo = {};
+            lpTag.agentSDK.init({});
+            lpTag.agentSDK.bind("chatInfo", function (data) {
+                chatInfo = data;
+            }, onError);
 
-		var onSuccess = function(data) {
-			var datarReceivedFlag = false;
-			var convId = chatInfo.newValue.rtSessionId;
-			console.log("success", data);
-			if(data){
-				for(i=0; i<data.newValue.length; i++){
-					let	encryptedData = data.newValue[i].keywords[0].value;
-					if(!datarReceivedFlag && convId!=null && encryptedData.startsWith(convId)){
-					encryptedData = encryptedData.substring(encryptedData.lastIndexOf(":-:-:")+5);
-					console.log("LPCustomer widget"+encryptedData);
-					encryptedData = encryptedData.replace(/\r?\n|\r/g,"");
-					decryptCustData(encryptedData);
-					datarReceivedFlag =true;
-					}
-				}
-				
-				if(!datarReceivedFlag){
-					let	encryptedData = data.newValue[0].keywords[0].value;
-					encryptedData = encryptedData.substring(encryptedData.lastIndexOf(":-:-:")+5);
-					encryptedData = encryptedData.replace(/\r?\n|\r/g,"");
-					console.log(encryptedData);
-					decryptCustData(encryptedData);
-				}
-			}
-			else{
-				HTMLString = "<div><p style = 'text-align:center;color: #fff; '> Could not get Agent details. </p></div>";
-				document.querySelector("table").insertAdjacentHTML('beforeend',HTMLString);
-			}
-			
-		};
 
-		var onError = function(err) {
-			console.log("error in bind");
-			console.log(err);
-			 if (err) {
-				HTMLString = "<div><p style = 'text-align:center;color: #fff; '> Could not retrieve agent details. </p></div>";
-				document.querySelector("table").insertAdjacentHTML('beforeend',HTMLString);
-			 }
-		};
+            var onSuccess = function (data) {
+                var datarReceivedFlag = false;
+                var convId = chatInfo.newValue.rtSessionId;
+                console.log("success", data);
+                if (data) {
+                    for (i = 0; i < data.newValue.length; i++) {
+                        let encryptedData = data.newValue[i].keywords[0].value;
+                        if (!datarReceivedFlag && convId != null && encryptedData.startsWith(convId)) {
+                            encryptedData = encryptedData.substring(encryptedData.lastIndexOf(":-:-:") + 5);
+                            console.log("LPCustomer widget" + encryptedData);
+                            encryptedData = encryptedData.replace(/\r?\n|\r/g, "");
+                            decryptCustData(encryptedData);
+                            datarReceivedFlag = true;
+                        }
+                    }
 
-		var pathToData = "SDE.searchContent";
-		console.log(pathToData);
-		lpTag.agentSDK.bind(pathToData, onSuccess, onError);
-		console.log(pathToData + " binding completed");
-		
-		function decryptCustData(encryptedData) {
-			const
-			encryptServletUrl = "https://collaborateext.verizon.com/comm/aims/EncryptDecrypt.serv";
-			
-			
-			if(encryptedData != null){
-				try {
-					$
-							.ajax({
-								type : "POST",
-								url : encryptServletUrl,
-								headers : {
-									'Access-Control-Allow-Origin' : '*',
-									'Access-Control-Allow-Credentials' : 'true',
-									'Access-Control-Allow-Methods' : 'GET,POST,PUT,DELETE,OPTIONS',
-									'Access-Control-Allow-Headers' : 'Content-Type'
-								},
-								data : {
-									action : "DECRYPT_CUSTOMER_DETAILS",
-									requestType : "ajaxRequest",
-									customerData : encryptedData,
-								},
-								dataType : "json",
-								success : function(data, status, xhr) {
-									let jsonData = data.DECRYPTED_CUSTOMER_DETAILS;
-									let	key = document.getElementById("key");
-									let	value = document.getElementById("value");
-									console.log(jsonData);
-																		
-									for ( let i in jsonData) {
+                    if (!datarReceivedFlag) {
+                        let encryptedData = data.newValue[0].keywords[0].value;
+                        encryptedData = encryptedData.substring(encryptedData.lastIndexOf(":-:-:") + 5);
+                        encryptedData = encryptedData.replace(/\r?\n|\r/g, "");
+                        console.log(encryptedData);
+                        formatData(encryptedData);
+                    }
+                }
+                else {
+                    HTMLString = "<div><p style = 'text-align:center;color: #fff; '> Could not get Agent details. </p></div>";
+                    document.querySelector("table").insertAdjacentHTML('beforeend', HTMLString);
+                }
 
-										HTMLStr = "<tr><td class='keys'>" + i
-												+ "</td><td class='values'>"
-												+ jsonData[i] + "</td></tr>";
+            };
 
-										document.querySelector("table")
-												.insertAdjacentHTML('beforeend',
-														HTMLStr);
-									}
+            var onError = function (err) {
+                console.log("error in bind");
+                console.log(err);
+                if (err) {
+                    HTMLString = "<div><p style = 'text-align:center;color: #fff; '> Could not retrieve agent details. </p></div>";
+                    document.querySelector("table").insertAdjacentHTML('beforeend', HTMLString);
+                }
+            };
 
-								},
-								error : function(xhr, status, error) {
-									console.log(error, "error")
-									HTMLString = "<div><p style = 'text-align:center;color: #fff; '> Exception occurred while decrypting Agent details. </p></div>";
-									document.querySelector("table").insertAdjacentHTML('beforeend',HTMLString);
-								}
-							});
-				} catch (e) {
-					console.log(e, "error in getEncryptedData");
-					HTMLString = "<div><p style = 'text-align:center;color: #fff; '> Unable to decrypt Agent details. </p></div>";
-					document.querySelector("table").insertAdjacentHTML('beforeend',HTMLString);
-				}
-			}
-			else{				
-					HTMLString = "<div><p style = 'text-align:center;color: #fff; '> Unable to display Agent details. </p></div>";
-					document.querySelector("table")
-					.insertAdjacentHTML('beforeend',
-					HTMLString);
-					
-			}
-			
-			
-		}
+            var pathToData = "SDE.searchContent";
+            console.log(pathToData);
+            lpTag.agentSDK.bind(pathToData, onSuccess, onError);
+            console.log(pathToData + " binding completed");
 
-	})();
-</script>
+            function formatData(data) {
+                const encryptServletUrl = "https://collaborateext.verizon.com/comm/aims/EncryptDecrypt.serv";
+
+
+                if (data != null) {
+
+                    for (let i in data) {
+
+                        HTMLStr = "<tr><td class='keys'>" + i
+                            + "</td><td class='values'>"
+                            + data[i] + "</td></tr>";
+
+                        document.querySelector("table")
+                            .insertAdjacentHTML('beforeend',
+                                HTMLStr);
+                    }
+                }
+                else {
+                    HTMLString = "<div><p style = 'text-align:center;color: #fff; '> Unable to display Agent details. </p></div>";
+                    document.querySelector("table")
+                        .insertAdjacentHTML('beforeend',
+                            HTMLString);
+                }
+            }
+        }) ();
+    </script>
 </head>
+
 <body>
-	<style>
-.block {
-	background-color: #22254f;
-	width: auto;
-}
+    <style>
+        .block {
+            background-color: #22254f;
+            width: auto;
+        }
 
-.keys {
-	color: #a9afba;
-	font-family: Myriad pro, Trebuchet MS, Lucida Grande,
-		Lucida Sans Unicode, Lucida Sans, sans-serif;
-	font-size: 12px;
-}
+        .keys {
+            color: #a9afba;
+            font-family: Myriad pro, Trebuchet MS, Lucida Grande,
+                Lucida Sans Unicode, Lucida Sans, sans-serif;
+            font-size: 12px;
+        }
 
-.values {
-	color: #fff;
-	font-size: 12px;
-	font-family: Myriad pro, Trebuchet MS, Lucida Grande,
-		Lucida Sans Unicode, Lucida Sans, sans-serif;
-}
+        .values {
+            color: #fff;
+            font-size: 12px;
+            font-family: Myriad pro, Trebuchet MS, Lucida Grande,
+                Lucida Sans Unicode, Lucida Sans, sans-serif;
+        }
 
-.data {
-	padding: 25px;
-	border-collapse: separate;
-	border-spacing: 1em;
-	min-height: -webkit-fill-available;
-	display: block;
-}
+        .data {
+            padding: 25px;
+            border-collapse: separate;
+            border-spacing: 1em;
+            min-height: -webkit-fill-available;
+            display: block;
+        }
 
-body {
-	margin: 0;
-	background-color: #22254f;
-}
+        body {
+            margin: 0;
+            background-color: #22254f;
+        }
 
-::-webkit-scrollbar {
-	width: 30px;
-}
+        ::-webkit-scrollbar {
+            width: 30px;
+        }
 
-::-webkit-scrollbar-thumb {
-	border-radius: 20px;
-	background-color: #4e5375;
-	border: 12px solid #22254f;
-}
+        ::-webkit-scrollbar-thumb {
+            border-radius: 20px;
+            background-color: #4e5375;
+            border: 12px solid #22254f;
+        }
 
-::-webkit-scrollbar-track {
-	background-color: #22254f;
-}
-</style>
-	<!-- <h1>Customer Data</h1> -->
-	<div class="block">
-		<table class="data">
-			<col width=30%>
-			<col width=70%>
-		</table>
-	</div>
+        ::-webkit-scrollbar-track {
+            background-color: #22254f;
+        }
+    </style>
+    <!-- <h1>Customer Data</h1> -->
+    <div class="block">
+        <table class="data">
+            <col width=30%>
+            <col width=70%>
+        </table>
+    </div>
 </body>
+
 </html>
