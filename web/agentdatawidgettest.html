@@ -16,28 +16,19 @@
             }, onError);
 
 
+            var pathToData = "SDE.searchContent";
+            console.log("bind to: " + pathToData);
+            lpTag.agentSDK.bind(pathToData, onSuccess, onError);
+
             var onSuccess = function (data) {
+                console.log("Bind Success: " + data)
                 var datarReceivedFlag = false;
                 var convId = chatInfo.newValue.rtSessionId;
-                console.log("success", data);
                 if (data) {
                     for (i = 0; i < data.newValue.length; i++) {
-                        let encryptedData = data.newValue[i].keywords[0].value;
-                        if (!datarReceivedFlag && convId != null && encryptedData.startsWith(convId)) {
-                            encryptedData = encryptedData.substring(encryptedData.lastIndexOf(":-:-:") + 5);
-                            console.log("LPCustomer widget" + encryptedData);
-                            encryptedData = encryptedData.replace(/\r?\n|\r/g, "");
-                            formatData(encryptedData);
-                            datarReceivedFlag = true;
-                        }
-                    }
-
-                    if (!datarReceivedFlag) {
-                        let encryptedData = data.newValue[0].keywords[0].value;
-                        encryptedData = encryptedData.substring(encryptedData.lastIndexOf(":-:-:") + 5);
-                        encryptedData = encryptedData.replace(/\r?\n|\r/g, "");
-                        console.log(encryptedData);
-                        formatData(encryptedData);
+                        let searchcontentSde = data.newValue[i].keywords[0].value;
+                        console.log("Search Content SDE: " + searchcontentSde);
+                        formatData(searchcontentSde);
                     }
                 }
                 else {
@@ -56,23 +47,18 @@
                 }
             };
 
-            var pathToData = "SDE.searchContent";
-            console.log(pathToData);
-            lpTag.agentSDK.bind(pathToData, onSuccess, onError);
-            console.log(pathToData + " binding completed");
-
             function formatData(data) {
                 const encryptServletUrl = "https://collaborateext.verizon.com/comm/aims/EncryptDecrypt.serv";
 
 
                 if (data != null) {
 
-                        HTMLStr = "</tr><td class='values'>" + data + "</td></tr>";
+                    HTMLStr = "</tr><td class='values'>" + data + "</td></tr>";
 
-                        document.querySelector("table")
-                            .insertAdjacentHTML('beforeend',
-                                HTMLStr);
-                    
+                    document.querySelector("table")
+                        .insertAdjacentHTML('beforeend',
+                            HTMLStr);
+
                 }
                 else {
                     HTMLString = "<div><p style = 'text-align:center;color: #fff; '> Unable to display Agent details. </p></div>";
@@ -81,7 +67,7 @@
                             HTMLString);
                 }
             }
-        }) ();
+        })();
     </script>
 </head>
 
