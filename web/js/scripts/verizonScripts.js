@@ -7,6 +7,7 @@ window.onload = function () {
         function (data) {
 
             lpEngagementID = data.eng.engData.engagementId;
+            console.log("lpTag.events.bind: EngagementID: " + lpEngagementID);
             if (data.conf.skillName.split(":").length > 1) {
                 coLpPriorityLevel = data.conf.skillName.split(":")[1].trim();
             }
@@ -14,6 +15,7 @@ window.onload = function () {
             coLpEngagementID = data.eng.engData.engagementId;
             coEngagementName = data.eng.conf.name;
             if (lpNBXLcAvailable == "Y" && !lpBauFlow && !isLpChatDisplayed) {
+                console.log("displayLPChatButton")
                 displayLPChatButton();
                 isLpChatDisplayed = true;
             }
@@ -42,7 +44,7 @@ window.onload = function () {
                     }
                 }
             }
-            catch (e) { }
+            catch (e) {console.log("first try failed.")}
             try {
                 if (lpChatTargetSiteCatalystArray.indexOf(data.eng.conf.name) == -1) {
                     lpChatTargetSiteCatalystArray.push(data.eng.conf.name);
@@ -62,7 +64,7 @@ window.onload = function () {
                         }
                     }
                 }
-            } catch (e) { }
+            } catch (e) {console.log("second try failed.")}
             if (stopInfinite > 0) {
                 return;
             }
@@ -71,7 +73,7 @@ window.onload = function () {
             } catch (arrer) {
                 console.log("error setTimeoutAA" + arrer);
             }
-            console.log(data.eng.engData.engagementType);
+            console.log("engagement Type: " + data.eng.engData.engagementType);
             var lpSkillName = data.conf.skillName;
             if (lpSkillNameInTimer != data.conf.skillName) {
                 lpSkillNameInTimer = data.conf.skillName;
@@ -85,13 +87,13 @@ window.onload = function () {
                 secQData =
                     secQData +
                     document.URL.split(".com")[1].split("?")[0].split("/").join("_");
-            } catch (err) { }
+            } catch (err) { console.log("getcookie LPVID failed")}
             var lpSkillNameQhealthRequest = data.conf.skillName.split(":")[0].replace("~", "");
             try {
                 if (lpSkillNameQhealthRequest.indexOf("4G/5G") != -1) {
                     lpSkillNameQhealthRequest = "Mobile Sales 4G 5G Home Internet";
                 }
-            } catch (err) { }
+            } catch (err) {console.log("queuehealth request failed.") }
             var req = {
                 RequestParams: {
                     skillAliasName: lpSkillNameQhealthRequest,
@@ -131,8 +133,7 @@ window.onload = function () {
                                 }
                             }
                         }
-                    } catch (e) {
-                    }
+                    } catch (e) {console.log("getcookie - proActiveDisableOverlaytrial, lpNewPageCall")}
                 }
                 req.RequestParams.priority = data.conf.skillName.replace("~", "");
             }
@@ -140,7 +141,7 @@ window.onload = function () {
                 if (data.conf.skillName.split(":").length > 1 && parseInt(lpprioritylevel.split("P")[1]) < parseInt(data.conf.skillName.split(":")[1].trim().split("P")[1])) {
                     lpprioritylevel = data.conf.skillName.split(":")[1].trim();
                 }
-            } catch (e) { }
+            } catch (e) {console.log("failed to get skillname."); }
             function apiCallTimer() {
                 var lpSkillNameQhealthRequestTimer = lpSkillNameInTimer.split(":")[0].replace("~", "");
                 try {
@@ -372,7 +373,7 @@ window.onload = function () {
                                     lpChatShownSiteCatalystObj.engagementIdAddedBeforeChatShown.push(data.eng.engData.engagementId);
                                     // sendLPEngagementsData(data.eng.conf.name);
                                 }
-                            } catch (e) { }
+                            } catch (e) {console.log("lpagentavailibility - failed to push data to lpchatshowsitecatalystobj") }
                             if (timerCallCount == true || timerCallCount == "true") {
                                 apiInterval = setInterval(apiCallTimer, 30000);
                             }
@@ -405,7 +406,7 @@ window.onload = function () {
                                         }
                                     }
                                 }
-                            } catch (e) { }
+                            } catch (e) {console.log("nxbreporting events failed") }
                             clearInterval(apiInterval);
                             if (lpButtonHided == true) {
                                 lpButtonHided = false;
