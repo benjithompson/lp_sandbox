@@ -1,0 +1,11 @@
+<action name="SendReport">
+    <shell xmlns="uri:oozie:shell-action:0.1">
+        <job-tracker>${jobTracker}</job-tracker>
+        <name-node>${nameNode}</name-node>
+        <exec>${ScriptFile}</exec>
+        <argument>${ProcessDateYMD}</argument>
+        <file>${ScriptFile}#${ScriptFile}</file>
+    </shell>
+    <ok to="SuccessEmail"/>
+    <error to="FailureEmail"/>
+</action>
