@@ -28,9 +28,9 @@ const sdkInit = () => {
 
     // bind all data sources
     bindDataSources().then(() => {
-        console.log(`[sdkInit] all data sources bound`)
+        printLogLine(`[sdkInit] all data sources bound`)
     }).catch(e => {
-        console.log(`[sdkInit] ERROR failed to bind data sources: ${e}`);
+        printLogLine(`[sdkInit] ERROR failed to bind data sources: ${e}`);
     });
 };
 
@@ -116,6 +116,18 @@ const printData = (data) => {
     $('tbody#bindOutput').prepend(newEntry)
 };
 
+
+const printLogLine = (logLine) => {
+    let line = $('<span>').text(timeString(new Date())+' '+logLine+'\n');
+    $('pre#logOutput').prepend(line)
+};
+
+
+// format a Date as a time string
+const timeString = (date) => {
+    return `${date.getHours()}:${('0'+date.getMinutes()).slice(-2)}:${('0'+date.getSeconds()).slice(-2)}.${date.getMilliseconds()}`
+};
+
 const sdkDispose = () => {
     // unbind all data sources
     unbindDataSources().then(() => {
@@ -136,10 +148,12 @@ const sdkDispose = () => {
 // <editor-fold defaultstate="collapsed" desc="Init">
 const init = () => {
     sdkInit();
-    console.log(`[widget] initialized SDK version ${lpTag.agentSDK.v}`);
+    printLogLine(`[widget] initialized SDK version ${lpTag.agentSDK.v}`);
 };
 
 $(function(){
-    console.log('[widget] initializing in '+initDelay+' ms...');
+    printLogLine('[widget] initializing in '+initDelay+' ms...');
     setTimeout(init,initDelay);
 });
+
+// </editor-fold>
