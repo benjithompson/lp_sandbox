@@ -24,15 +24,8 @@ const bindJSONOptions = { collapsed: true };
 
 const sdkInit = () => {
     // initialize the SDK
-    lpTag.agentSDK.init({
-        notificationCallback: notificationCallback,
-        visitorFocusedCallback: visitorFocusedCallback,
-        visitorBlurredCallback: visitorBlurredCallback
-    });
-    // disable the 'init' button
-    $('button#init').attr('disabled', 'disabled');
-    // enable the 'dispose' button
-    $('button#dispose').removeAttr('disabled');
+    lpTag.agentSDK.init({});
+
     // bind all data sources
     bindDataSources().then(() => {
         printLogLine(`[sdkInit] all data sources bound`)
