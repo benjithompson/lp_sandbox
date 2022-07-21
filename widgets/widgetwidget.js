@@ -167,6 +167,66 @@ const sdkInit = () => {
     });
 };
 
+// bind all data sources
+const bindDataSources = () => {
+    // concurrently, for each data source run 'bindDataSource'
+    return Promise.all(Object.keys(dataSources).map(source => {
+        return bindDataSource(source)
+    }));
+};
+
+// return a promise that will bind a specific data source
+const bindDataSource = (path) => {
+    return new Promise((resolve, reject) => {
+        // bind printData to the specified data source / path
+        lpTag.agentSDK.bind(path,
+          printData,
+          (err) => {
+            // when finished
+              if (err) {
+                  // if there was an error binding update the bind state indicator and reject the promise
+                  updateBindIndicator(path);
+                  reject(err);
+              } else {
+                  // if the bind succeeded set the bind state to true, update the indicator, and resolve the promise
+                  dataSources[path].bound = true;
+                  updateBindIndicator(path);
+                  resolve(true)
+              }
+          })
+    });
+};
+
+// unbind all data sources
+const unbindDataSources = () => {
+    // concurrently, for each data source run 'unbindDataSource'
+    return Promise.all(Object.keys(dataSources).map(source => {
+        return unbindDataSource(source)
+    }));
+};
+
+// return a promise that will unbind a specific data source
+const unbindDataSource = (path) => {
+    return new Promise((resolve, reject) => {
+        // unbind printData from the specified data source / path
+        lpTag.agentSDK.unbind(path,
+          printData,
+          (err) => {
+            // when finished
+              if (err) {
+                  // if there was an error unbinding update the bind state indicator and reject the promise
+                  updateBindIndicator(path);
+                  reject(err)
+              } else {
+                  // if the unbind succeeded set the bind state to false, update the indicator, and resolve the promise
+                  dataSources[path].bound = false;
+                  updateBindIndicator(path);
+                  resolve(true)
+              }
+          })
+    });
+};
+
 // log when focus gained
 const visitorFocusedCallback = () => {
     lpTag.agentSDK.get('visitorInfo.visitorName', (visitorName) => {
@@ -232,21 +292,6 @@ const addBindIndicators = () => {
     }
 };
 
-// bind all data sources
-const bindDataSources = () => {
-    // concurrently, for each data source run 'bindDataSource'
-    return Promise.all(Object.keys(dataSources).map(source => {
-        return bindDataSource(source)
-    }));
-};
-
-// unbind all data sources
-const unbindDataSources = () => {
-    // concurrently, for each data source run 'unbindDataSource'
-    return Promise.all(Object.keys(dataSources).map(source => {
-        return unbindDataSource(source)
-    }));
-};
 
 // create the dropdown menu to filter bind output
 const addFilterDropDown = () => {
@@ -313,49 +358,6 @@ const filterEvents = () => {
     if (!$('input#showUnchanged')[0].checked) { $('.unchanged').hide() }
 };
 
-// return a promise that will bind a specific data source
-const bindDataSource = (path) => {
-    return new Promise((resolve, reject) => {
-        // bind printData to the specified data source / path
-        lpTag.agentSDK.bind(path,
-          printData,
-          (err) => {
-            // when finished
-              if (err) {
-                  // if there was an error binding update the bind state indicator and reject the promise
-                  updateBindIndicator(path);
-                  reject(err);
-              } else {
-                  // if the bind succeeded set the bind state to true, update the indicator, and resolve the promise
-                  dataSources[path].bound = true;
-                  updateBindIndicator(path);
-                  resolve(true)
-              }
-          })
-    });
-};
-
-// return a promise that will unbind a specific data source
-const unbindDataSource = (path) => {
-    return new Promise((resolve, reject) => {
-        // unbind printData from the specified data source / path
-        lpTag.agentSDK.unbind(path,
-          printData,
-          (err) => {
-            // when finished
-              if (err) {
-                  // if there was an error unbinding update the bind state indicator and reject the promise
-                  updateBindIndicator(path);
-                  reject(err)
-              } else {
-                  // if the unbind succeeded set the bind state to false, update the indicator, and resolve the promise
-                  dataSources[path].bound = false;
-                  updateBindIndicator(path);
-                  resolve(true)
-              }
-          })
-    });
-};
 
 // call bind or unbind as appropriate for this data source
 const toggleDataBind = (path) => {
