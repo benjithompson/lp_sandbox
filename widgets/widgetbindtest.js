@@ -18,13 +18,10 @@ const dataSources = {
       splitSession: { bound: null }
   };
 
-// </editor-fold>
 const urlParams = {};
 const lastValue = {};
 const bindJSONOptions = { collapsed: true };
 
-
-// <editor-fold defaultstate="collapsed" desc="Global Methods">
 const sdkInit = () => {
     // initialize the SDK
     lpTag.agentSDK.init({
@@ -103,8 +100,6 @@ const unbindDataSource = (path) => {
           })
     });
 };
-// </editor-fold>
-
 
 // print data to log on update
 const printData = (data) => {
@@ -128,12 +123,17 @@ const printData = (data) => {
     $('tbody#bindOutput').prepend(newEntry)
 };
 
-// <editor-fold defaultstate="collapsed" desc="Log Tab">
+
 const printLogLine = (logLine) => {
     let line = $('<span>').text(timeString(new Date())+' '+logLine+'\n');
     $('pre#logOutput').prepend(line)
 };
-// </editor-fold>
+
+
+// format a Date as a time string
+const timeString = (date) => {
+    return `${date.getHours()}:${('0'+date.getMinutes()).slice(-2)}:${('0'+date.getSeconds()).slice(-2)}.${date.getMilliseconds()}`
+};
 
 const sdkDispose = () => {
     // unbind all data sources
