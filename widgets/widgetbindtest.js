@@ -128,6 +128,13 @@ const printData = (data) => {
     $('tbody#bindOutput').prepend(newEntry)
 };
 
+// <editor-fold defaultstate="collapsed" desc="Log Tab">
+const printLogLine = (logLine) => {
+    let line = $('<span>').text(timeString(new Date())+' '+logLine+'\n');
+    $('pre#logOutput').prepend(line)
+};
+// </editor-fold>
+
 const sdkDispose = () => {
     // unbind all data sources
     unbindDataSources().then(() => {
