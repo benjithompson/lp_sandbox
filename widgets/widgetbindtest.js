@@ -28,9 +28,9 @@ const sdkInit = () => {
 
     // bind all data sources
     bindDataSources().then(() => {
-        printLogLine(`[sdkInit] all data sources bound`)
+        console.log(`[sdkInit] all data sources bound`)
     }).catch(e => {
-        printLogLine(`[sdkInit] ERROR failed to bind data sources: ${e}`);
+        console.log(`[sdkInit] ERROR failed to bind data sources: ${e}`);
     });
 };
 
@@ -116,18 +116,6 @@ const printData = (data) => {
     $('tbody#bindOutput').prepend(newEntry)
 };
 
-
-const printLogLine = (logLine) => {
-    let line = $('<span>').text(timeString(new Date())+' '+logLine+'\n');
-    $('pre#logOutput').prepend(line)
-};
-
-
-// format a Date as a time string
-const timeString = (date) => {
-    return `${date.getHours()}:${('0'+date.getMinutes()).slice(-2)}:${('0'+date.getSeconds()).slice(-2)}.${date.getMilliseconds()}`
-};
-
 const sdkDispose = () => {
     // unbind all data sources
     unbindDataSources().then(() => {
@@ -148,19 +136,10 @@ const sdkDispose = () => {
 // <editor-fold defaultstate="collapsed" desc="Init">
 const init = () => {
     sdkInit();
-    addBindIndicators();
-    addFilterDropDown();
-    bindUnchangedFilter();
-    getQueryStringParams();
-    printQueryStringParams();
-    populateSampleSC();
-    createGetButtons();
-    printLogLine(`[widget] initialized SDK version ${lpTag.agentSDK.v}`);
+    console.log(`[widget] initialized SDK version ${lpTag.agentSDK.v}`);
 };
 
 $(function(){
-    printLogLine('[widget] initializing in '+initDelay+' ms...');
+    console.log('[widget] initializing in '+initDelay+' ms...');
     setTimeout(init,initDelay);
 });
-
-// </editor-fold>
