@@ -28,9 +28,9 @@ const sdkInit = () => {
 
     // bind all data sources
     bindDataSources().then(() => {
-        printLogLine(`[sdkInit] all data sources bound`)
+        console.log(`[sdkInit] all data sources bound`)
     }).catch(e => {
-        printLogLine(`[sdkInit] ERROR failed to bind data sources: ${e}`);
+        console.log(`[sdkInit] ERROR failed to bind data sources: ${e}`);
     });
 };
 
@@ -131,13 +131,13 @@ const timeString = (date) => {
 const sdkDispose = () => {
     // unbind all data sources
     unbindDataSources().then(() => {
-        printLogLine('[sdkDispose] all data sources unbound');
+        console.log('[sdkDispose] all data sources unbound');
     }).catch(e => {
-        printLogLine(`[sdkDispose] ERROR failed to unbind data sources: ${e}`);
+        console.log(`[sdkDispose] ERROR failed to unbind data sources: ${e}`);
     }).finally(() => {
         // use the SDK 'dispose' method
         lpTag.agentSDK.dispose();
-        printLogLine('[sdkDispose] SDK disposed');
+        console.log('[sdkDispose] SDK disposed');
         // enable the 'init' button
         $('button#init').removeAttr('disabled');
         // disable the 'dispose' button
@@ -148,11 +148,11 @@ const sdkDispose = () => {
 // <editor-fold defaultstate="collapsed" desc="Init">
 const init = () => {
     sdkInit();
-    printLogLine(`[widget] initialized SDK version ${lpTag.agentSDK.v}`);
+    console.log(`[widget] initialized SDK version ${lpTag.agentSDK.v}`);
 };
 
 $(function(){
-    printLogLine('[widget] initializing in '+initDelay+' ms...');
+    console.log('[widget] initializing in '+initDelay+' ms...');
     setTimeout(init,initDelay);
 });
 
