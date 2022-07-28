@@ -501,29 +501,34 @@ window.onload = function () {
             });
         }
     );
+
+    addEventListenerMouseOut();
 };
 
-document.body.addEventListener("mouseout", (function(e) {
-    console.log("mouseout event listener added");
-    try {
-        if ("undefined" != typeof lpTag && null != lpTag && 0 != Object.keys(lpTag).length && void 0 !== lpTag.newPage && null != lpTag.newPage && "" != lpTag.newPage && e.clientY <= 50 && lpTag && lpTag.section && lpTag.section.indexOf("preemptiveLeave") <= -1) {
-            var t = lpTag && lpTag.section || [];
-            t.push("preemptiveLeave"),
-            lpTag.newPage(document.URL, {
-                section: t,
-                taglets: {
-                    rendererStub: {
-                        divIdsToKeep: {
-                            LP_SALES_HOME_EMBEDDED: !0
+function addEventListenerMouseOut(){
+    document.body.addEventListener("mouseout", (function(e) {
+        console.log("mouseout event listener added");
+        try {
+            if ("undefined" != typeof lpTag && null != lpTag && 0 != Object.keys(lpTag).length && void 0 !== lpTag.newPage && null != lpTag.newPage && "" != lpTag.newPage && e.clientY <= 50 && lpTag && lpTag.section && lpTag.section.indexOf("preemptiveLeave") <= -1) {
+                var t = lpTag && lpTag.section || [];
+                t.push("preemptiveLeave"),
+                lpTag.newPage(document.URL, {
+                    section: t,
+                    taglets: {
+                        rendererStub: {
+                            divIdsToKeep: {
+                                LP_SALES_HOME_EMBEDDED: !0
+                            }
                         }
                     }
-                }
-            })
+                })
+            }
+        } catch (e) {
+            console.log(e, "preemptive error")
         }
-    } catch (e) {
-        console.log(e, "preemptive error")
-    }
-}));
+    }));
+}
+
 
 //display chat button
 function displayLPChatButton() {
